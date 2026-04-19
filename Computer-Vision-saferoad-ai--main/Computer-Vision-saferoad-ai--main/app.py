@@ -173,65 +173,6 @@ h1, h2, h3 {
 </style>
 """, unsafe_allow_html=True)
 
-# ─── Database Helper ──────────────────────────────────────────────────────────
-def get_db_connection():
-    """Connect to PostgreSQL. Returns None if not configured."""
-    try:
-        db_url = st.session_state.get("db_url", "")
-        if not db_url:
-            return None
-        conn = psycopg2.connect(db_url, connect_timeout=5)
-        return conn
-    except Exception:
-        return None
-
-
-def init_db(conn):
-    if conn is None:
-        return False
-    try:
-        cur = conn.cursor()
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS violations (
-                id SERIAL PRIMARY KEY,
-                plate_number TEXT,
-                violation_type TEXT DEFAULT 'No Seatbelt',
-                confidence REAL,
-                timestamp TIMESTAMPTZ DEFAULT NOW(),
-                image_name TEXT
-            );
-        """)
-        conn.commit()
-        return True
-    except Exception as e:
-        st.error(f"DB init error: {e}")
-        return False
-
-
-def insert_violation(conn, plate_number, violation_type, confidence, image_name):
-    if conn is None:
-        return False
-    try:
-        cur = conn.cursor()
-        cur.execute(
-            "INSERT INTO violations (plate_number, violation_type, confidence, image_name) VALUES (%s,%s,%s,%s)",
-            (plate_number, violation_type, float(confidence), image_name)
-        )
-        conn.commit()
-        return True
-    except Exception:
-        return False
-
-
-def fetch_violations(conn):
-    if conn is None:
-        return pd.DataFrame()
-    try:
-        df = pd.read_sql("SELECT * FROM violations ORDER BY timestamp DESC LIMIT 200", conn)
-        return df
-    except Exception:
-        return pd.DataFrame()
-
 
 # ─── Mock Detection (replace with real YOLO/OCR) ─────────────────────────────
 def mock_detect(image_np):
