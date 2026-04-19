@@ -22,31 +22,27 @@ st.set_page_config(
 # ─── Custom CSS ───────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap');
 
 :root {
-    --bg: #0a0f1c;
-    --surface: #111827;
-    --card: #1f2937;
-    --border: #374151;
-
-    --primary: #6366f1;   /* Indigo */
-    --secondary: #22c55e; /* Green */
-    --danger: #ef4444;    /* Red */
-    --warning: #f59e0b;   /* Amber */
-
-    --text: #f9fafb;
-    --muted: #9ca3af;
+    --bg: #0b0d12;
+    --surface: #12151e;
+    --card: #181c28;
+    --border: #252a3a;
+    --accent: #f5c518;
+    --danger: #ff3b3b;
+    --safe: #00e5a0;
+    --muted: #5a6075;
+    --text: #e8eaf2;
 }
 
-/* Global */
 html, body, [class*="css"] {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Syne', sans-serif;
     color: var(--text);
 }
 
 .stApp {
-    background: linear-gradient(135deg, #0a0f1c, #020617);
+    background-color: var(--bg);
 }
 
 /* Sidebar */
@@ -55,123 +51,227 @@ html, body, [class*="css"] {
     border-right: 1px solid var(--border);
 }
 
-/* Headings */
-h1, h2, h3 {
-    font-weight: 700;
-    letter-spacing: -0.5px;
-}
+/* Headers */
+h1, h2, h3 { font-family: 'Syne', sans-serif; font-weight: 800; }
 
-/* Metric Cards */
+/* Metric cards */
 .metric-card {
-    background: linear-gradient(145deg, #1f2937, #111827);
+    background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 18px;
+    border-radius: 12px;
+    padding: 20px 24px;
     text-align: center;
-    transition: 0.2s;
+    position: relative;
+    overflow: hidden;
 }
-.metric-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
 }
+.metric-card.yellow::before { background: var(--accent); }
+.metric-card.red::before    { background: var(--danger); }
+.metric-card.green::before  { background: var(--safe); }
 
 .metric-value {
-    font-size: 2rem;
+    font-size: 2.4rem;
     font-weight: 800;
+    font-family: 'Space Mono', monospace;
+    line-height: 1;
+    margin-bottom: 4px;
 }
-
 .metric-label {
-    font-size: 0.75rem;
-    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
 }
 
-/* Status Badges */
+/* Violation badge */
 .violation-badge {
-    background: rgba(239,68,68,0.15);
+    display: inline-block;
+    background: rgba(255,59,59,0.15);
     color: var(--danger);
     border: 1px solid var(--danger);
-    padding: 4px 10px;
     border-radius: 20px;
+    padding: 3px 12px;
     font-size: 0.7rem;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.05em;
+    font-weight: 700;
 }
-
 .safe-badge {
-    background: rgba(34,197,94,0.15);
-    color: var(--secondary);
-    border: 1px solid var(--secondary);
-    padding: 4px 10px;
+    display: inline-block;
+    background: rgba(0,229,160,0.1);
+    color: var(--safe);
+    border: 1px solid var(--safe);
     border-radius: 20px;
+    padding: 3px 12px;
     font-size: 0.7rem;
+    font-family: 'Space Mono', monospace;
 }
 
-/* Plate Display */
+/* Section title */
+.section-title {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-family: 'Space Mono', monospace;
+}
+
+/* Plate display */
 .plate-display {
-    background: #020617;
-    border: 1px solid var(--primary);
-    color: var(--primary);
-    padding: 6px 16px;
+    background: #1a1a00;
+    border: 2px solid var(--accent);
     border-radius: 8px;
-    font-weight: bold;
-    letter-spacing: 2px;
+    padding: 10px 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    display: inline-block;
 }
 
 /* Buttons */
 .stButton > button {
-    background: linear-gradient(90deg, #6366f1, #4f46e5) !important;
-    color: white !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
+    background: var(--accent) !important;
+    color: #0b0d12 !important;
     border: none !important;
+    border-radius: 8px !important;
+    font-family: 'Syne', sans-serif !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    padding: 10px 28px !important;
+    transition: all 0.2s ease !important;
 }
 .stButton > button:hover {
-    opacity: 0.9;
-    transform: scale(1.02);
+    opacity: 0.85 !important;
+    transform: translateY(-1px) !important;
 }
 
-/* Upload Box */
+/* Tables */
+.stDataFrame {
+    border: 1px solid var(--border) !important;
+    border-radius: 10px !important;
+}
+
+/* Upload area */
 [data-testid="stFileUploader"] {
     background: var(--card);
     border: 2px dashed var(--border);
     border-radius: 12px;
+    padding: 10px;
 }
 [data-testid="stFileUploader"]:hover {
-    border-color: var(--primary);
+    border-color: var(--accent);
+}
+
+/* Progress */
+.stProgress > div > div {
+    background: var(--accent) !important;
 }
 
 /* Tabs */
+.stTabs [data-baseweb="tab"] {
+    font-family: 'Syne', sans-serif !important;
+    font-weight: 600 !important;
+    color: var(--muted) !important;
+}
 .stTabs [aria-selected="true"] {
-    color: var(--primary) !important;
-    border-bottom: 2px solid var(--primary) !important;
+    color: var(--accent) !important;
+    border-bottom-color: var(--accent) !important;
 }
 
-/* Log Card */
+/* Log entry */
 .log-entry {
     background: var(--card);
-    border-left: 4px solid var(--danger);
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 10px;
+    border-left: 3px solid var(--danger);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
 }
-.log-entry.safe {
-    border-left-color: var(--secondary);
-}
+.log-entry.safe { border-left-color: var(--safe); }
 
-/* Section Title */
-.section-title {
-    font-size: 0.75rem;
-    color: var(--primary);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-}
-
-/* Progress Bar */
-.stProgress > div > div {
-    background: var(--primary) !important;
+/* Top bar */
+.top-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
 }
 </style>
 """, unsafe_allow_html=True)
+
+
+# ─── Database Helper ──────────────────────────────────────────────────────────
+def get_db_connection():
+    """Connect to PostgreSQL. Returns None if not configured."""
+    try:
+        db_url = st.session_state.get("db_url", "")
+        if not db_url:
+            return None
+        conn = psycopg2.connect(db_url, connect_timeout=5)
+        return conn
+    except Exception:
+        return None
+
+
+def init_db(conn):
+    if conn is None:
+        return False
+    try:
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS violations (
+                id SERIAL PRIMARY KEY,
+                plate_number TEXT,
+                violation_type TEXT DEFAULT 'No Seatbelt',
+                confidence REAL,
+                timestamp TIMESTAMPTZ DEFAULT NOW(),
+                image_name TEXT
+            );
+        """)
+        conn.commit()
+        return True
+    except Exception as e:
+        st.error(f"DB init error: {e}")
+        return False
+
+
+def insert_violation(conn, plate_number, violation_type, confidence, image_name):
+    if conn is None:
+        return False
+    try:
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO violations (plate_number, violation_type, confidence, image_name) VALUES (%s,%s,%s,%s)",
+            (plate_number, violation_type, float(confidence), image_name)
+        )
+        conn.commit()
+        return True
+    except Exception:
+        return False
+
+
+def fetch_violations(conn):
+    if conn is None:
+        return pd.DataFrame()
+    try:
+        df = pd.read_sql("SELECT * FROM violations ORDER BY timestamp DESC LIMIT 200", conn)
+        return df
+    except Exception:
+        return pd.DataFrame()
 
 
 # ─── Mock Detection (replace with real YOLO/OCR) ─────────────────────────────
